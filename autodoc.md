@@ -1,39 +1,54 @@
-# Repository Documentation
+# `app.py` Documentation
 
-This document provides an overview and detailed analysis of the code contained within this repository, adhering strictly to the provided source code.
+This document describes the `app.py` script, which is written in Python.
 
----
+## Overview
 
-## `app.py`
+The `app.py` script is a simple Python program designed to output strings to the console. It contains a series of `print` statements.
 
-### Language
+## File Contents: `app.py`
 
-*   **Python**
-
-### Overview
-
-The `app.py` script is a simple Python file designed to output specific string literals to the console.
-
-### Content Analysis
-
-The script contains the following lines of code:
-
-1.  `print("hi")`: This line uses the built-in Python `print()` function to output the string "hi" to standard output.
-2.  `print("hello")`: This line uses the built-in Python `print()` function to output the string "hello" to standard output.
-3.  `print("test")`: This line uses the built-in Python `print()` function to output the string "test" to standard output.
-4.  `p r i n t ( ' t e s t   w e b h o o k ' )`: This line contains characters that resemble a Python print statement but includes spaces between the letters 'p', 'r', 'i', 'n', 't'. Due to these spaces, this sequence of characters does not form a valid call to the built-in `print()` function in Python.
-
-### Execution Behavior (Python)
-
-When `app.py` is executed using a Python interpreter:
-
-*   The first three `print` statements will successfully execute, outputting "hi", "hello", and "test" to the console, each on a new line.
-*   The line `p r i n t ( ' t e s t   w e b h o o k ' )` will cause a runtime error (specifically, a `NameError` or `SyntaxError` depending on the Python version and context) because `p r i n t` with spaces is not recognized as a valid function call or a defined variable within the Python language. This error will halt the script's execution.
-
-### Usage
-
-To run this script, ensure you have a Python interpreter installed. Then, navigate to the directory containing `app.py` and execute it from your terminal:
-
-```bash
-python app.py
+```python
+print("hi")
+print("hello")
+print("test")
+p r i n t ( ' t e s t   w e b h o o k ' ) 
 ```
+
+## Functionality
+
+The `app.py` script performs the following actions:
+
+1.  Prints the string `"hi"` to the standard output.
+2.  Prints the string `"hello"` to the standard output.
+3.  Prints the string `"test"` to the standard output.
+4.  Attempts to print the string `"test webhook"` to the standard output.
+
+## How to Run
+
+To execute the `app.py` script:
+
+1.  Ensure you have a Python interpreter installed on your system.
+2.  Save the provided code into a file named `app.py`.
+3.  Open a terminal or command prompt.
+4.  Navigate to the directory where `app.py` is saved.
+5.  Execute the script using the Python interpreter:
+    ```bash
+    python app.py
+    ```
+    or, if `python` refers to Python 2, use:
+    ```bash
+    python3 app.py
+    ```
+
+## Expected Output and Observations
+
+When `app.py` is executed, the following output will be displayed in the console:
+
+```
+hi
+hello
+test
+```
+
+Following these lines, the script will terminate due to a `SyntaxError`. The last statement, `p r i n t ( ' t e s t   w e b h o o k ' )`, is syntactically incorrect in Python because there are spaces between the letters of the `print` keyword. Python requires keywords and function names to be written without intervening spaces.
