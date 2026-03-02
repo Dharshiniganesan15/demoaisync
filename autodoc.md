@@ -1,35 +1,39 @@
-# Basic Python Application
+# Basic Python Console Output
 
-This repository contains a simple Python script.
+This repository contains a single Python script demonstrating basic console output.
 
-## Description
+## Table of Contents
 
-The `app.py` script is a basic Python program that outputs two distinct greeting messages to the standard console output.
+-   [Overview](#overview)
+-   [Files](#files)
+-   [How to Run](#how-to-run)
+-   [Expected Output](#expected-output)
+
+## Overview
+
+This project provides a minimal example of a Python program that prints two distinct messages to the console.
 
 ## Files
 
--   `app.py`: The main Python script that performs the printing operations.
+### `app.py`
 
-## Languages Used
-
-*   Python
+*   **Language:** Python
+*   **Description:** This script contains two `print()` statements. When executed, it will output the string "hi" followed by the string "hello" to the standard output (console), each on a new line.
 
 ## How to Run
 
-To execute this application, you need to have Python installed on your system.
+To execute the `app.py` script, you will need a Python interpreter installed on your system.
 
-1.  Save the provided code as `app.py` in a directory of your choice.
-2.  Open a terminal or command prompt.
-3.  Navigate to the directory where you saved `app.py`.
-4.  Run the script using the Python interpreter:
+1.  Navigate to the directory containing `app.py` in your terminal or command prompt.
+2.  Run the script using the Python interpreter:
 
     ```bash
     python app.py
     ```
 
-## Output
+## Expected Output
 
-When the script is executed, it will produce the following output in the console:
+Upon running the `app.py` script, the console will display the following output:
 
 ```
 hi
