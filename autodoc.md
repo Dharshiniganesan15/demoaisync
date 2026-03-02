@@ -1,41 +1,58 @@
-# Basic Python Console Output
+# Simple Python Greeter
 
-This repository contains a single Python script demonstrating basic console output.
+This repository contains a very basic Python script that prints two greeting messages to the console.
 
 ## Table of Contents
 
--   [Overview](#overview)
--   [Files](#files)
--   [How to Run](#how-to-run)
--   [Expected Output](#expected-output)
+*   [Description](#description)
+*   [Getting Started](#getting-started)
+    *   [Prerequisites](#prerequisites)
+    *   [Installation](#installation)
+*   [Usage](#usage)
+*   [File Analysis](#file-analysis)
 
-## Overview
+## Description
 
-This project provides a minimal example of a Python program that prints two distinct messages to the console.
+The `app.py` script is a minimalistic demonstration of Python's `print()` function. When executed, it outputs two distinct strings, "hi" and "hello", sequentially to the standard output.
 
-## Files
+## Getting Started
 
-### `app.py`
+### Prerequisites
 
-*   **Language:** Python
-*   **Description:** This script contains two `print()` statements. When executed, it will output the string "hi" followed by the string "hello" to the standard output (console), each on a new line.
+To run this script, you will need:
 
-## How to Run
+*   Python (version 3.x recommended)
 
-To execute the `app.py` script, you will need a Python interpreter installed on your system.
+### Installation
 
-1.  Navigate to the directory containing `app.py` in your terminal or command prompt.
-2.  Run the script using the Python interpreter:
+No special installation steps are required beyond having a Python interpreter installed on your system.
+You can download Python from the [official Python website](https://www.python.org/downloads/).
 
-    ```bash
-    python app.py
-    ```
+## Usage
 
-## Expected Output
+To run the script, navigate to the directory containing `app.py` in your terminal or command prompt and execute the following command:
 
-Upon running the `app.py` script, the console will display the following output:
+```bash
+python app.py
+```
+
+Upon execution, the script will produce the following output:
 
 ```
 hi
 hello
 ```
+
+## File Analysis
+
+### `app.py`
+
+This file contains the core logic of the application, which is a simple sequence of two print statements.
+
+```python
+print("hi")
+print("hello")
+```
+
+*   `print("hi")`: This line uses the built-in `print()` function in Python to output the string "hi" to the console.
+*   `print("hello")`: This line, immediately following the first, outputs the string "hello" to the console. Each `print()` call results in a new line by default.
