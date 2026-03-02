@@ -1,58 +1,42 @@
-# Simple Python Greeter
+# Simple Python Application
 
-This repository contains a very basic Python script that prints two greeting messages to the console.
+This repository contains a basic Python script demonstrating fundamental output operations.
 
-## Table of Contents
+## Files
 
-*   [Description](#description)
-*   [Getting Started](#getting-started)
-    *   [Prerequisites](#prerequisites)
-    *   [Installation](#installation)
-*   [Usage](#usage)
-*   [File Analysis](#file-analysis)
+-   `app.py`: A Python script that prints two separate messages to the console.
 
-## Description
+## `app.py` Analysis
 
-The `app.py` script is a minimalistic demonstration of Python's `print()` function. When executed, it outputs two distinct strings, "hi" and "hello", sequentially to the standard output.
+### Language
 
-## Getting Started
+Python
 
-### Prerequisites
+### Description
 
-To run this script, you will need:
+The `app.py` script is a simple Python program. When executed, it performs the following actions in sequence:
 
-*   Python (version 3.x recommended)
+1.  Prints the string `"hi"` to the standard output.
+2.  Prints the string `"hello"` to the standard output on a new line.
 
-### Installation
-
-No special installation steps are required beyond having a Python interpreter installed on your system.
-You can download Python from the [official Python website](https://www.python.org/downloads/).
+There are no inputs, external dependencies, or complex logic involved. It serves as a minimal example of a Python script producing console output.
 
 ## Usage
 
-To run the script, navigate to the directory containing `app.py` in your terminal or command prompt and execute the following command:
+To run the `app.py` script, ensure you have Python installed on your system.
 
-```bash
-python app.py
-```
+1.  Navigate to the directory containing `app.py` in your terminal or command prompt.
+2.  Execute the script using the Python interpreter:
 
-Upon execution, the script will produce the following output:
+    ```bash
+    python app.py
+    ```
+
+## Output
+
+Upon successful execution, the script will produce the following output in your console:
 
 ```
 hi
 hello
 ```
-
-## File Analysis
-
-### `app.py`
-
-This file contains the core logic of the application, which is a simple sequence of two print statements.
-
-```python
-print("hi")
-print("hello")
-```
-
-*   `print("hi")`: This line uses the built-in `print()` function in Python to output the string "hi" to the console.
-*   `print("hello")`: This line, immediately following the first, outputs the string "hello" to the console. Each `print()` call results in a new line by default.
