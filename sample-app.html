@@ -126,8 +126,13 @@
     </header>
 
     <section class="content">
-      <div class="row">
+      <div class="row" style="grid-template-columns: 1fr 140px auto;">
         <input id="taskInput" type="text" placeholder="Enter task..." />
+        <select id="prioritySelect">
+          <option value="high">High</option>
+          <option value="medium" selected>Medium</option>
+          <option value="low">Low</option>
+        </select>
         <button id="addBtn">Add Task</button>
       </div>
 
@@ -148,12 +153,14 @@
   <script>
     const taskInput = document.getElementById("taskInput");
     const addBtn = document.getElementById("addBtn");
+    const prioritySelect = document.getElementById("prioritySelect");
     const taskList = document.getElementById("taskList");
     const filterSelect = document.getElementById("filterSelect");
     const summary = document.getElementById("summary");
     const emptyState = document.getElementById("emptyState");
     const clock = document.getElementById("clock");
 
+    const STORAGE_KEY = "demoaisync_tasks_v1";
     const tasks = [];
 
     function formatDateTime(d = new Date()) {
@@ -164,20 +171,38 @@
       clock.textContent = formatDateTime();
     }
 
-    function createTask(text) {
+    function createTask(text, priority) {
       return {
         id: crypto.randomUUID(),
         text: text.trim(),
+        priority: priority || "medium",
         done: false,
         createdAt: new Date().toISOString(),
       };
     }
 
+    function saveTasks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          tasks.splice(0, tasks.length, ...parsed);
+        }
+      } catch (_) {}
+    }
+
     function addTask() {
       const text = taskInput.value.trim();
       if (!text) return;
-      tasks.unshift(createTask(text));
+      tasks.unshift(createTask(text, prioritySelect.value));
       taskInput.value = "";
+      prioritySelect.value = "medium";
+      saveTasks();
       render();
       taskInput.focus();
     }
@@ -185,20 +210,29 @@
     function toggleTask(id) {
       const item = tasks.find((t) => t.id === id);
       if (item) item.done = !item.done;
+      saveTasks();
       render();
     }
 
     function removeTask(id) {
       const index = tasks.findIndex((t) => t.id === id);
       if (index >= 0) tasks.splice(index, 1);
+      saveTasks();
       render();
     }
 
     function getFilteredTasks() {
       const f = filterSelect.value;
-      if (f === "active") return tasks.filter((t) => !t.done);
-      if (f === "done") return tasks.filter((t) => t.done);
-      return tasks;
+      const priorityOrder = { high: 0, medium: 1, low: 2 };
+      const list =
+        f === "active"
+          ? tasks.filter((t) => !t.done)
+          : f === "done"
+            ? tasks.filter((t) => t.done)
+            : tasks;
+      return [...list].sort(
+        (a, b) => (priorityOrder[a.priority] ?? 99) - (priorityOrder[b.priority] ?? 99),
+      );
     }
 
     function render() {
@@ -210,7 +244,7 @@
         li.innerHTML = `
           <div>
             <div class="${task.done ? "done" : ""}">${task.text}</div>
-            <div class="meta">Created: ${new Date(task.createdAt).toLocaleString()}</div>
+            <div class="meta">Priority: ${(task.priority || "medium").toUpperCase()} | Created: ${new Date(task.createdAt).toLocaleString()}</div>
           </div>
           <div class="controls">
             <button class="btn-success">${task.done ? "Undo" : "Done"}</button>
@@ -235,6 +269,7 @@
     });
     filterSelect.addEventListener("change", render);
 
+    loadTasks();
     setInterval(renderClock, 1000);
     renderClock();
     render();
