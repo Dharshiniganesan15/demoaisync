@@ -1,3 +1,6 @@
+import math
+
+
 def add(a, b):
     return a + b
 
@@ -32,6 +35,16 @@ def floor_divide(a, b):
     return a // b
 
 
+def square_root(a):
+    if a < 0:
+        raise ValueError("Cannot take square root of a negative number.")
+    return math.sqrt(a)
+
+
+def percent_of(a, b):
+    return (a / 100.0) * b
+
+
 def calculate(a, b, operator):
     if operator == "+":
         return add(a, b)
@@ -50,6 +63,17 @@ def calculate(a, b, operator):
     raise ValueError("Unsupported operator. Use one of: +, -, *, /, %, ^, //")
 
 
+def evaluate_expression(expression):
+    """Parse and evaluate expressions like '12 + 7'."""
+    parts = expression.strip().split()
+    if len(parts) != 3:
+        raise ValueError("Expression format should be: <number> <operator> <number>")
+    a = float(parts[0])
+    operator = parts[1]
+    b = float(parts[2])
+    return calculate(a, b, operator)
+
+
 def print_history(history):
     if not history:
         print("No calculations yet.")
@@ -63,6 +87,7 @@ def print_history(history):
 def main():
     print("Simple Calculator")
     print("Supported operators: +, -, *, /, %, ^, //")
+    print("Extra commands: sqrt <number>, pct <percent> <number>, expr <a op b>")
     print("Type 'history' to view previous calculations.")
     print("Type 'exit' to quit.\n")
 
@@ -75,6 +100,37 @@ def main():
             break
         if first == "history":
             print_history(history)
+            continue
+        if first.startswith("sqrt "):
+            try:
+                value = float(first.split(maxsplit=1)[1])
+                result = square_root(value)
+                history.append(f"sqrt {value} = {result}")
+                print(f"Result: {result}\n")
+            except ValueError as exc:
+                print(f"Error: {exc}\n")
+            continue
+        if first.startswith("pct "):
+            try:
+                parts = first.split()
+                if len(parts) != 3:
+                    raise ValueError("Format: pct <percent> <number>")
+                percent = float(parts[1])
+                number = float(parts[2])
+                result = percent_of(percent, number)
+                history.append(f"{percent}% of {number} = {result}")
+                print(f"Result: {result}\n")
+            except ValueError as exc:
+                print(f"Error: {exc}\n")
+            continue
+        if first.startswith("expr "):
+            try:
+                expression = first.split(maxsplit=1)[1]
+                result = evaluate_expression(expression)
+                history.append(f"{expression} = {result}")
+                print(f"Result: {result}\n")
+            except ValueError as exc:
+                print(f"Error: {exc}\n")
             continue
 
         try:
