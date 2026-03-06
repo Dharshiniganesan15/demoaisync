@@ -109,3 +109,16 @@ The embedded JavaScript provides the dynamic and interactive behavior of the tas
 - `setInterval(renderClock, 1000)`: Sets up a recurring timer to update the clock every 1000 milliseconds (1 second).
 - `renderClock()`: An immediate call to display the clock upon page load.
 - `render()`: An immediate call to render the initial (empty) task list upon page load.
+
+## Features
+
+- Add new tasks.
+- Mark tasks as done and undo completion.
+- Delete tasks.
+- Filter tasks by `All`, `Active`, and `Done`.
+- Search tasks by text (`searchInput`).
+- Clear all completed tasks (`clearCompletedBtn`).
+- View task summary: total tasks, completed tasks, and currently shown tasks.
+- Real-time clock in the header (updates every second).
+- Empty-state message when no tasks match the current view.
+- In-memory task data (resets on refresh/close).
