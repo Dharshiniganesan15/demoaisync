@@ -4,304 +4,234 @@ This document provides a comprehensive overview of the codebase, adhering strict
 
 ## Overview
 
-The codebase consists of two distinct applications: a command-line simple calculator written in Python, and a client-side web-based task manager application implemented using HTML, CSS, and JavaScript. The Python script provides basic arithmetic operations via a terminal interface, while the HTML file defines a web page with a user interface for managing tasks, including creation, editing, deletion, filtering, sorting, and data persistence in local storage, along with import/export capabilities.
+The codebase consists of two independent applications:
+1.  A command-line calculator written in Python (`app.py`).
+2.  A web-based task manager implemented as a single HTML file (`sample-app.html`), incorporating HTML structure, CSS styling, and JavaScript functionality.
+
+These two applications do not interact with each other.
 
 ## File Structure
 
-- `app.py`: Contains the Python code for a simple command-line calculator.
-- `sample-app.html`: Contains the HTML structure, CSS styling, and JavaScript functionality for a web-based task manager.
+-   `app.py`: Contains the Python code for a command-line calculator.
+-   `sample-app.html`: Contains the HTML structure, CSS styling, and JavaScript logic for a web-based task manager.
 
 ## File: app.py
 
-This Python file implements a simple command-line calculator.
+This file contains Python code implementing a simple command-line calculator application.
 
 **Functions:**
 
-- `add(a, b)`:
-    - Takes two numerical arguments, `a` and `b`.
-    - Returns their sum.
-- `subtract(a, b)`:
-    - Takes two numerical arguments, `a` and `b`.
-    - Returns the difference of `a` minus `b`.
-- `multiply(a, b)`:
-    - Takes two numerical arguments, `a` and `b`.
-    - Returns their product.
-- `divide(a, b)`:
-    - Takes two numerical arguments, `a` and `b`.
-    - Returns the result of `a` divided by `b`.
-    - Raises a `ValueError` if `b` is `0`.
-- `calculate(a, b, operator)`:
-    - Takes two numerical arguments `a`, `b`, and a string `operator`.
-    - Calls the appropriate arithmetic function (`add`, `subtract`, `multiply`, `divide`) based on the `operator` string.
-    - Supports `+`, `-`, `*`, `/` operators.
-    - Raises a `ValueError` if an unsupported operator is provided.
-- `main()`:
-    - The main entry point for the calculator application.
-    - Prints a welcome message and supported operators.
-    - Prompts the user to enter two numbers and an operator via standard input.
-    - Converts input numbers to `float`.
-    - Calls `calculate` with the user inputs.
-    - Prints the calculated `Result`.
-    - Catches and prints `ValueError` exceptions that may occur during input conversion, division by zero, or unsupported operators.
+*   `add(a, b)`: Returns the sum of `a` and `b`.
+*   `subtract(a, b)`: Returns the difference of `a` and `b`.
+*   `multiply(a, b)`: Returns the product of `a` and `b`.
+*   `divide(a, b)`: Returns the quotient of `a` and `b`. Raises `ValueError` if `b` is zero.
+*   `modulo(a, b)`: Returns the remainder of the division of `a` by `b`. Raises `ValueError` if `b` is zero.
+*   `power(a, b)`: Returns `a` raised to the power of `b`.
+*   `floor_divide(a, b)`: Returns the floor division of `a` by `b`. Raises `ValueError` if `b` is zero.
+*   `calculate(a, b, operator)`: Takes two numbers `a`, `b` and an `operator` string. It dispatches to the appropriate arithmetic function based on the operator. Supported operators are `+`, `-`, `*`, `/`, `%`, `^`, `//`. Raises `ValueError` for unsupported operators.
+*   `print_history(history)`: Prints the list of past calculations. If the history is empty, it prints "No calculations yet.".
+*   `main()`: The main entry point of the calculator application.
+    *   It prints a welcome message and lists supported operators.
+    *   It maintains a `history` list to store calculation expressions.
+    *   It enters a loop that prompts the user for the first number, operator, and second number.
+    *   Users can type `'exit'` to quit the application or `'history'` to view past calculations.
+    *   It attempts to convert user input to `float` and perform calculations using the `calculate` function.
+    *   Successful calculations are added to the `history` list and the result is printed.
+    *   It catches `ValueError` for invalid input or operations (like division by zero) and prints an error message.
 
 **Execution:**
 
-- The `if __name__ == "__main__":` block ensures that the `main()` function is called only when the script is executed directly (not when imported as a module).
+The `if __name__ == "__main__":` block ensures that the `main()` function is called only when the script is executed directly.
 
 ## File: sample-app.html
 
-This HTML file defines a web page for a task manager application. It includes embedded CSS for styling and embedded JavaScript for all interactive functionality.
+This file is a self-contained web application for managing tasks. It includes the HTML structure, CSS styling, and JavaScript functionality within a single file.
 
 ## HTML Structure
 
-The `sample-app.html` file defines the following structure:
+The HTML document defines the structure of a "Task Manager" application.
 
-- `<!doctype html>`: Declares an HTML5 document.
-- `<html lang="en">`: The root element, specifying English language.
-- `<head>`:
-    - `<meta charset="UTF-8" />`: Specifies UTF-8 character encoding.
-    - `<meta name="viewport" content="width=device-width, initial-scale=1.0" />`: Configures the viewport for responsive design.
-    - `<title>Task Manager</title>`: Sets the title that appears in the browser tab.
-    - `<style>`: Contains all the CSS styling for the page.
-- `<body>`:
-    - `<main class="app">`: The main container for the task manager application.
-        - `<header>`:
-            - `<h1>Demo AI Sync - Task Board</h1>`: The main heading of the application.
-            - `<span id="clock"></span>`: An element to display the current time.
-        - `<section class="content">`: Contains the main interactive elements and task list.
-            - **Task Input Row:** (`<div class="row" style="grid-template-columns: 1fr 130px 130px auto;">`)
-                - `<input id="taskInput" type="text" placeholder="Enter task..." />`: Input field for new task text.
-                - `<select id="prioritySelect">`: Dropdown for selecting task priority (High, Medium, Low).
-                - `<input id="dueDateInput" type="date" />`: Date input for task due date.
-                - `<button id="addBtn">Add Task</button>`: Button to add a new task.
-            - **Filter/Sort/Search Row:** (`<div class="row" style="grid-template-columns: 160px 160px 1fr auto;">`)
-                - `<select id="filterSelect">`: Dropdown for filtering tasks (All, Active, Done).
-                - `<select id="sortSelect">`: Dropdown for sorting tasks (Newest, Oldest, Priority, Due Date).
-                - `<input id="searchInput" type="text" placeholder="Search tasks..." />`: Input field for searching tasks.
-                - `<button id="clearCompletedBtn" class="button-clear">Clear Completed</button>`: Button to remove all completed tasks.
-            - **Summary Row:** (`<div class="row" style="grid-template-columns: 1fr;">`)
-                - `<div class="meta" id="summary">0 tasks</div>`: Displays a summary of tasks.
-            - **Bulk Actions/Import/Export Row:** (`<div class="row" style="grid-template-columns: repeat(4, auto); justify-content: start;">`)
-                - `<button id="markAllDoneBtn" class="button-clear">Mark All Done</button>`: Button to mark all tasks as done.
-                - `<button id="markAllActiveBtn" class="button-clear">Mark All Active</button>`: Button to mark all tasks as active.
-                - `<button id="exportBtn" class="button-clear">Export JSON</button>`: Button to export tasks as JSON.
-                - `<button id="importBtn" class="button-clear">Import JSON</button>`: Button to trigger JSON import.
-            - `<ul id="taskList"></ul>`: An unordered list where individual tasks are rendered.
-            - `<div id="emptyState" class="empty">No tasks yet. Add your first task.</div>`: A message displayed when no tasks are present.
-            - `<input id="importFileInput" type="file" accept="application/json" style="display:none;" />`: A hidden file input for importing JSON.
-    - `<script>`: Contains all the JavaScript code for the task manager functionality.
+*   **Document Setup:** Standard HTML5 boilerplate with `lang="en"`, `meta` tags for charset and viewport, and a `<title>` of "Task Manager".
+*   **Main Container:** A `<main>` element with class `app` serves as the primary container for the application interface.
+*   **Header:**
+    *   A `<header>` element inside `main` contains an `<h1>` with "Demo AI Sync - Task Board" and a `<span>` with `id="clock"` to display a live clock.
+*   **Content Section:**
+    *   A `<section>` with class `content` holds all interactive elements and the task list.
+    *   **Task Input Row:** A `div` with class `row` contains:
+        *   An `<input>` field (`id="taskInput"`) for entering task descriptions.
+        *   A `<select>` element (`id="prioritySelect"`) for choosing task priority (High, Medium, Low).
+        *   An `<input>` field (`id="dueDateInput"`, type="date") for selecting a due date.
+        *   A `<button>` (`id="addBtn"`) to add tasks.
+    *   **Filter/Sort/Search Row:** Another `div` with class `row` contains:
+        *   A `<select>` (`id="filterSelect"`) for filtering tasks by status (All, Active, Done).
+        *   A `<select>` (`id="sortSelect"`) for sorting tasks (Newest, Oldest, Priority, Due Date).
+        *   An `<input>` field (`id="searchInput"`) for searching tasks by text.
+        *   A `<button>` (`id="clearCompletedBtn"`) to clear completed tasks.
+    *   **Summary Row:** A `div` with class `row` contains a `div` (`id="summary"`) to display task summary information (e.g., "0 tasks").
+    *   **Bulk Actions Row:** A `div` with class `row` contains buttons for bulk actions:
+        *   `Mark All Done` (`id="markAllDoneBtn"`)
+        *   `Mark All Active` (`id="markAllActiveBtn"`)
+        *   `Export JSON` (`id="exportBtn"`)
+        *   `Import JSON` (`id="importBtn"`)
+    *   **Task List:** An unordered list (`<ul id="taskList">`) where individual tasks will be dynamically rendered.
+    *   **Empty State:** A `div` (`id="emptyState"`) with class `empty` to be displayed when no tasks are present.
+    *   **Hidden File Input:** An `<input>` field (`id="importFileInput"`, type="file") for importing JSON, hidden by default.
 
 ## CSS Styling
 
-The embedded `<style>` block in `sample-app.html` defines the visual appearance of the task manager.
+The CSS styling is embedded within a `<style>` block in the `<head>` of `sample-app.html`.
 
-**CSS Variables:**
-
-- Defines several custom properties (CSS variables) in the `:root` pseudo-class for consistent theming: `--bg`, `--card`, `--text`, `--muted`, `--primary`, `--success`, `--danger`, `--border`.
-
-**General Styling:**
-
-- `*`: Global `box-sizing: border-box`.
-- `body`: Sets `margin`, `font-family`, a `linear-gradient` background, text color, min-height, and uses CSS Grid for centering the app.
-- `.app`: Styles the main application container with `width` constraints, background, border, `border-radius`, and `box-shadow`.
-- `header`: Styles the application header with background, text color, padding, and uses flexbox for alignment.
-- `header h1`: Resets margin and sets font size for the main title.
-- `header span`: Styles the clock display.
-- `.content`: Styles the main content area with padding and CSS Grid layout for its children.
-- `.row`: Styles grid-based rows for layout, with varying `grid-template-columns` applied inline to specific `div.row` elements.
-
-**Form Elements Styling:**
-
-- `input`, `select`, `button`: Inherits font, sets `border-radius`, `border`, and `padding`.
-- `input:focus`, `select:focus`: Adds outline and border color on focus.
-- `button`: Sets `cursor`, removes `border`, applies `primary` background and white text, with `font-weight`.
-- `.button-clear`: Styles a secondary button with a darker background.
-
-**Task List Styling:**
-
-- `ul`: Resets `list-style`, `margin`, `padding`, and uses CSS Grid for task items.
-- `li`: Styles individual task items with border, `border-radius`, padding, CSS Grid, and `align-items`.
-- `.meta`: Styles metadata text (color, font size, margin).
-- `.badge`: Styles priority badges (inline-block, `border-radius`, padding, font size/weight).
-- `.priority-high`, `.priority-medium`, `.priority-low`: Specific background and text colors for different priority levels.
-- `.overdue`: Applies red text and bold font to overdue dates.
-- `.controls`: Uses flexbox for layout of task action buttons.
-- `.done`: Applies `text-decoration: line-through` and muted color for completed tasks.
-- `.btn-success`, `.btn-danger`: Styles success and danger buttons with specific background colors.
-- `.empty`: Styles the empty state message with padding, centered text, muted color, dashed border, and `border-radius`.
+*   **CSS Variables:** Defines a set of custom properties (CSS variables) in `:root` for consistent colors (background, card, text, muted, primary, success, danger, border).
+*   **Global Reset/Base Styles:**
+    *   `*`: Sets `box-sizing: border-box`.
+    *   `body`: Resets margin, sets font family, applies a linear gradient background, sets text color, centers content vertically and horizontally, and adds padding.
+*   **App Container (`.app`):** Styles the main application container as a card with a maximum width, background, border, border-radius, and box-shadow.
+*   **Header:** Styles the header with a dark background, white text, padding, and uses flexbox for alignment and spacing.
+*   **Content Area (`.content`):** Sets padding and uses CSS grid for layout with a gap between grid items.
+*   **Row Layouts (`.row`):** Uses CSS grid to arrange elements in rows, with specific column definitions for different sections (e.g., task input row, filter row).
+*   **Form Elements (`input`, `select`, `button`):** Provides consistent styling for font, border-radius, border, padding, and focus states.
+*   **Buttons:**
+    *   Default `button` styles for cursor, border, background, color, and font weight.
+    *   `.button-clear`: Specific styles for a "clear" button with a dark background.
+    *   `.btn-success`, `.btn-danger`: Styles for success (green) and danger (red) themed buttons.
+*   **Task List (`ul`, `li`):**
+    *   `ul`: Removes default list styling, resets margin/padding, and uses CSS grid for item spacing.
+    *   `li`: Styles individual task items with borders, rounded corners, padding, and uses CSS grid to arrange task details and controls.
+*   **Meta Information (`.meta`):** Styles for secondary text, typically used for dates and priority badges.
+*   **Badges (`.badge`):** General styling for small informational labels.
+*   **Priority Badges (`.priority-high`, `.priority-medium`, `.priority-low`):** Specific background and text colors for different priority levels.
+*   **Overdue Text (`.overdue`):** Highlights overdue text with a danger color and bold font.
+*   **Controls (`.controls`):** Uses flexbox for layout of action buttons within a task item.
+*   **Done Tasks (`.done`):** Applies line-through text decoration and a muted color to completed tasks.
+*   **Empty State (`.empty`):** Styles the message displayed when no tasks are present, with centering, muted color, dashed border, and padding.
 
 ## JavaScript Functionality
 
-The embedded `<script>` block in `sample-app.html` provides all the interactive functionality for the task manager.
+The JavaScript code is embedded within a `<script>` block at the end of `sample-app.html`. It implements the interactive logic for the task manager.
 
-**DOM Element References:**
-
-- A collection of `const` variables are defined to hold references to various HTML elements by their `id`, facilitating DOM manipulation.
-
-**Global State:**
-
-- `STORAGE_KEY`: A string constant used as the key for `localStorage` to store task data.
-- `tasks`: An array that holds all task objects in memory.
-
-**Utility Functions:**
-
-- `formatDateTime(d = new Date())`: Formats a `Date` object into a locale-specific string.
-- `renderClock()`: Updates the `clock` span with the current formatted date and time.
-- `createTask(text, priority, dueDate)`: Creates a new task object with a unique ID, text, priority, due date, `done` status, and `createdAt` timestamp.
-
-**Data Persistence (Local Storage):**
-
-- `saveTasks()`: Serializes the `tasks` array to a JSON string and saves it to `localStorage` using `STORAGE_KEY`.
-- `loadTasks()`: Retrieves task data from `localStorage`, parses it, and populates the `tasks` array. It includes error handling and data cleaning to ensure valid task objects.
-
-**Task Management Functions:**
-
-- `addTask()`:
-    - Gets task text, priority, and due date from input fields.
-    - Creates a new task using `createTask`.
-    - Adds the new task to the beginning of the `tasks` array.
-    - Clears input fields.
-    - Saves tasks and re-renders the UI.
-    - Sets focus back to the task input.
-- `toggleTask(id)`: Finds a task by ID and toggles its `done` status. Saves tasks and re-renders.
-- `editTask(id)`: Prompts the user to edit a task's text, updates the task, saves, and re-renders.
-- `removeTask(id)`: Finds a task by ID and removes it from the `tasks` array. Saves tasks and re-renders.
-- `clearCompletedTasks()`: Iterates through the `tasks` array and removes all tasks where `done` is `true`. Saves tasks and re-renders.
-- `markAllDone()`: Sets `done: true` for all tasks. Saves tasks and re-renders.
-- `markAllActive()`: Sets `done: false` for all tasks. Saves tasks and re-renders.
-
-**Import/Export Functions:**
-
-- `exportTasks()`:
-    - Creates a JSON `payload` containing `exportedAt` timestamp and the current `tasks` array.
-    - Creates a `Blob` from the JSON string.
-    - Creates a temporary anchor (`<a>`) element, sets its `href` to a URL for the blob, and `download` attribute for the filename.
-    - Programmatically clicks the link to trigger the download.
-    - Cleans up the temporary URL and anchor element.
-- `importTasksFromFile(file)`:
-    - Takes a `File` object as input.
-    - Uses `FileReader` to read the file content as text.
-    - On load, attempts to parse the JSON content.
-    - Extracts `tasks` data, cleans it, and replaces the current `tasks` array with the imported ones.
-    - Saves tasks and re-renders.
-    - Displays an alert for invalid JSON format.
-
-**Filtering, Sorting, and Searching:**
-
-- `getFilteredTasks()`:
-    - Applies filtering based on `filterSelect` (all, active, done).
-    - Applies searching based on `searchInput` (case-insensitive text match).
-    - Sorts the filtered tasks based on `sortSelect` (newest, oldest, priority, due date). Priority sorting uses a defined `priorityRank` object.
-
-**Rendering Function:**
-
-- `render()`:
-    - Gets the list of filtered and sorted tasks using `getFilteredTasks()`.
-    - Clears the current content of `taskList`.
-    - Iterates through the `rows` (tasks):
-        - Constructs HTML for each task item, including task text, priority badge, due date, created date, and control buttons (Done/Undo, Edit, Delete).
-        - Determines if a task is `overdue` based on `dueDate` and `done` status.
-        - Attaches event listeners to the "Done/Undo", "Edit", and "Delete" buttons for each task, calling `toggleTask`, `editTask`, and `removeTask` respectively.
-        - Appends the generated `li` element to `taskList`.
-    - Updates the `summary` text with task counts.
-    - Toggles the visibility of the `emptyState` message based on the number of displayed tasks.
-    - Disables/enables `clearCompletedBtn`, `markAllDoneBtn`, and `markAllActiveBtn` based on task counts and status.
-
-**Event Listeners:**
-
-- `addBtn` (click): Calls `addTask`.
-- `taskInput` (keydown - Enter key): Calls `addTask`.
-- `filterSelect` (change): Calls `render`.
-- `sortSelect` (change): Calls `render`.
-- `searchInput` (input): Calls `render`.
-- `clearCompletedBtn` (click): Calls `clearCompletedTasks`.
-- `markAllDoneBtn` (click): Calls `markAllDone`.
-- `markAllActiveBtn` (click): Calls `markAllActive`.
-- `exportBtn` (click): Calls `exportTasks`.
-- `importBtn` (click): Triggers a click on the hidden `importFileInput`.
-- `importFileInput` (change): Calls `importTasksFromFile` with the selected file.
-
-**Initial Setup:**
-
-- `loadTasks()`: Loads existing tasks from local storage on page load.
-- `setInterval(renderClock, 1000)`: Updates the clock every second.
-- `renderClock()`: Initial call to display the clock immediately.
-- `render()`: Initial call to render the task list on page load.
+*   **DOM Element References:** Stores references to various HTML elements by their IDs (e.g., `taskInput`, `addBtn`, `taskList`, `summary`, `clock`).
+*   **Constants:**
+    *   `STORAGE_KEY`: A string used as the key for storing tasks in `localStorage`.
+    *   `tasks`: An array that holds all task objects.
+*   **Utility Functions:**
+    *   `formatDateTime(d)`: Formats a `Date` object into a localized date and time string.
+    *   `renderClock()`: Updates the `clock` span with the current formatted date and time.
+*   **Task Management Core Logic:**
+    *   `createTask(text, priority, dueDate)`: Generates a new task object with a unique `id` (using `crypto.randomUUID()`), `text`, `priority`, `dueDate`, `done` status (initially `false`), and `createdAt` timestamp.
+    *   `saveTasks()`: Serializes the `tasks` array to a JSON string and saves it to `localStorage` using `STORAGE_KEY`.
+    *   `loadTasks()`: Retrieves tasks from `localStorage`, parses the JSON, and populates the `tasks` array. It includes error handling and a data cleaning/migration step to ensure task objects have expected properties and structure.
+*   **Task Actions:**
+    *   `addTask()`: Retrieves values from `taskInput`, `prioritySelect`, and `dueDateInput`. If `taskInput` is not empty, it creates a new task using `createTask`, adds it to the beginning of the `tasks` array, clears the input fields, saves tasks, and triggers a `render`.
+    *   `toggleTask(id)`: Finds a task by `id` and flips its `done` status. Saves tasks and triggers a `render`.
+    *   `editTask(id)`: Prompts the user to edit a task's text. If input is valid, updates the task, saves, and re-renders.
+    *   `removeTask(id)`: Finds a task by `id` and removes it from the `tasks` array. Saves tasks and triggers a `render`.
+    *   `clearCompletedTasks()`: Iterates through the `tasks` array and removes all tasks where `done` is `true`. Saves tasks and triggers a `render`.
+    *   `markAllDone()`: Sets the `done` status of all tasks to `true`. Saves tasks and triggers a `render`.
+    *   `markAllActive()`: Sets the `done` status of all tasks to `false`. Saves tasks and triggers a `render`.
+    *   `exportTasks()`: Creates a JSON blob containing the current `tasks` and `exportedAt` timestamp. It then creates a temporary anchor element (`<a>`), sets its `href` to a URL created from the blob, and programmatically clicks it to trigger a file download.
+    *   `importTasksFromFile(file)`: Reads a provided file as text. Upon loading, it attempts to parse the content as JSON. It expects either an array of tasks or an object with a `tasks` property that is an array. It cleans/maps the incoming tasks, replaces the current `tasks` array, saves, and triggers a `render`. It alerts the user if the file is not valid JSON.
+*   **Filtering and Sorting:**
+    *   `getFilteredTasks()`: Applies filtering and sorting logic to the `tasks` array.
+        *   **Filtering:** Filters by task status (`all`, `active`, `done`) and by a search query (case-insensitive substring match against task text).
+        *   **Sorting:** Sorts tasks based on the `sortSelect` value: `newest` (by `createdAt` descending), `oldest` (by `createdAt` ascending), `priority` (High > Medium > Low), or `due` (earliest `dueDate` first, tasks without due dates appear last).
+*   **Rendering (`render()`):**
+    *   Retrieves the currently filtered and sorted tasks using `getFilteredTasks()`.
+    *   Clears the `taskList` HTML content.
+    *   Iterates through each task:
+        *   Dynamically creates an `<li>` element.
+        *   Determines if a task is `overdue` based on its `dueDate` and `done` status.
+        *   Populates the `<li>`'s `innerHTML` with task text, priority badge, due date, creation date, and action buttons ("Done"/"Undo", "Edit", "Delete").
+        *   Attaches event listeners to the dynamically created buttons (`toggleTask`, `editTask`, `removeTask`).
+        *   Appends the `<li>` to the `taskList`.
+    *   Updates the `summary` text with task counts (total, done, showing).
+    *   Controls the visibility of the `emptyState` message.
+    *   Disables/enables `clearCompletedBtn`, `markAllDoneBtn`, and `markAllActiveBtn` based on the current state of tasks (e.g., `clearCompletedBtn` is disabled if no tasks are done).
+*   **Event Listeners:**
+    *   `addBtn` click: calls `addTask`.
+    *   `taskInput` keydown (Enter key): calls `addTask`.
+    *   `filterSelect` change: calls `render`.
+    *   `sortSelect` change: calls `render`.
+    *   `searchInput` input: calls `render`.
+    *   `clearCompletedBtn` click: calls `clearCompletedTasks`.
+    *   `markAllDoneBtn` click: calls `markAllDone`.
+    *   `markAllActiveBtn` click: calls `markAllActive`.
+    *   `exportBtn` click: calls `exportTasks`.
+    *   `importBtn` click: programmatically clicks the hidden `importFileInput`.
+    *   `importFileInput` change: calls `importTasksFromFile` with the selected file.
+*   **Initialization:**
+    *   `loadTasks()` is called to load any previously saved tasks when the script starts.
+    *   `setInterval(renderClock, 1000)` sets up the clock to update every second.
+    *   `renderClock()` is called once immediately to display the clock.
+    *   `render()` is called once immediately to display the initial task list.
 
 ## Features
-- **Python Calculator:**
-    - Addition of two numbers.
-    - Subtraction of two numbers.
-    - Multiplication of two numbers.
-    - Division of two numbers (with zero-division error handling).
-    - Command-line interface for inputting numbers and operator.
-    - Error handling for invalid input or operations.
-- **Web Task Manager:**
-    - **Task Management:**
-        - Add new tasks with text, priority (high, medium, low), and an optional due date.
-        - Display a list of tasks.
-        - Mark tasks as done or undo their completion status.
-        - Edit existing task text.
-        - Delete individual tasks.
-        - Clear all completed tasks.
-        - Mark all tasks as done.
-        - Mark all tasks as active.
-    - **Data Persistence:**
-        - Tasks are saved to and loaded from the browser's local storage.
-    - **Filtering and Sorting:**
-        - Filter tasks by status (all, active, done).
-        - Sort tasks by newest first, oldest first, priority (high > medium > low), or due date.
-    - **Search:**
-        - Search tasks by text (case-insensitive).
-    - **Import/Export:**
-        - Export all tasks to a JSON file.
-        - Import tasks from a JSON file.
-    - **User Interface:**
-        - Displays a real-time clock.
-        - Shows a summary of total tasks and completed tasks.
-        - Displays a message when no tasks are present.
-        - Buttons for bulk actions (Mark All Done, Mark All Active, Clear Completed) are dynamically enabled/disabled.
-        - Visual indication for task priority (badges).
-        - Visual indication for overdue tasks.
-        - Visual indication for completed tasks (strike-through text).
-        - Basic responsive styling.
+
+This codebase provides the following features:
+
+**From `app.py` (Command-Line Calculator):**
+-   Performs basic arithmetic operations: addition (`+`), subtraction (`-`), multiplication (`*`), and division (`/`).
+-   Supports advanced arithmetic operations: modulo (`%`), exponentiation (`^`), and floor division (`//`).
+-   Includes error handling for division by zero scenarios for `/`, `%`, and `//` operators.
+-   Stores a history of all successful calculations.
+-   Allows users to view the calculation history at any point by typing 'history'.
+-   Provides an option to exit the application by typing 'exit'.
+-   Handles non-numeric input gracefully with error messages.
+
+**From `sample-app.html` (Web-Based Task Manager):**
+-   **Task Creation:** Add new tasks with a text description, priority (High, Medium, Low), and an optional due date.
+-   **Task Management:**
+    -   Toggle the completion status of individual tasks (mark as "Done" or "Undo").
+    -   Edit the text content of existing tasks.
+    -   Delete individual tasks.
+-   **Bulk Actions:**
+    -   Clear all completed tasks.
+    -   Mark all tasks as done.
+    -   Mark all tasks as active (not done).
+-   **Filtering:** Filter tasks by status: all tasks, active tasks, or completed tasks.
+-   **Sorting:** Sort tasks by:
+    -   Newest (creation date, descending)
+    -   Oldest (creation date, ascending)
+    -   Priority (High, Medium, Low)
+    -   Due Date (earliest first)
+-   **Search:** Search tasks by keywords in their text description.
+-   **Persistence:** Tasks are automatically saved to and loaded from the browser's local storage, ensuring data persists across sessions.
+-   **User Interface:**
+    -   Displays tasks with their text, priority (indicated by a badge), due date, and creation timestamp.
+    -   Visually indicates completed tasks by striking through their text.
+    -   Visually highlights overdue tasks.
+    -   Displays a live clock in the application header.
+    -   Provides a dynamic summary of tasks (total, done, and currently displayed tasks).
+    -   Shows an "empty state" message when no tasks match the current filters or if the list is empty.
+    -   Disables relevant control buttons (e.g., "Clear Completed," "Mark All Done") when their action is not applicable.
+-   **Import/Export:**
+    -   Export all current tasks to a JSON file.
+    -   Import tasks from a JSON file, replacing the current task list.
 
 ## How to Use/Run
 
-**For the Python Calculator (`app.py`):**
+**To use the Python Calculator (`app.py`):**
 
-1.  Save the provided Python code as `app.py`.
-2.  Open a terminal or command prompt.
-3.  Navigate to the directory where you saved `app.py`.
-4.  Run the script using the Python interpreter:
+1.  **Save the file:** Save the provided Python code as `app.py` on your computer.
+2.  **Open a terminal/command prompt:** Navigate to the directory where you saved `app.py`.
+3.  **Run the script:** Execute the script using a Python interpreter:
     ```bash
     python app.py
     ```
-5.  Follow the prompts to enter the first number, operator, and second number. The result or an error message will be printed to the console.
+4.  **Interact:** Follow the prompts in the terminal:
+    *   Enter the first number.
+    *   Enter the operator (`+`, `-`, `*`, `/`, `%`, `^`, `//`).
+    *   Enter the second number.
+    *   To view calculation history, type `history` when prompted for the first number.
+    *   To exit the application, type `exit` when prompted for the first number.
 
-**For the Web Task Manager (`sample-app.html`):**
+**To use the Web-Based Task Manager (`sample-app.html`):**
 
-1.  Save the provided HTML code as `sample-app.html`.
-2.  Open the `sample-app.html` file directly in a web browser (e.g., by double-clicking it in your file explorer).
-3.  The task manager application will load in your browser.
-4.  **Add a Task:**
-    - Type a task description into the "Enter task..." input field.
-    - Select a priority from the dropdown.
-    - Select a due date using the date input.
-    - Click the "Add Task" button or press `Enter` in the task input field.
-5.  **Manage Tasks:**
-    - Click "Done" to mark a task as completed, or "Undo" to revert.
-    - Click "Edit" to modify a task's text.
-    - Click "Delete" to remove a task.
-6.  **Filter, Sort, and Search:**
-    - Use the "Filter" dropdown to show "All", "Active", or "Done" tasks.
-    - Use the "Sort" dropdown to change the order of tasks.
-    - Type into the "Search tasks..." field to filter tasks by text.
-7.  **Bulk Actions:**
-    - Click "Clear Completed" to remove all tasks marked as done.
-    - Click "Mark All Done" to mark every task as completed.
-    - Click "Mark All Active" to mark every task as not completed.
-8.  **Import/Export:**
-    - Click "Export JSON" to download your current tasks as a `.json` file.
-    - Click "Import JSON" to open a file dialog and select a `.json` file to load tasks from.
-    - Tasks are automatically saved and loaded from your browser's local storage, so they will persist across browser sessions.
+1.  **Save the file:** Save the provided HTML code as `sample-app.html` on your computer.
+2.  **Open in a web browser:** Locate the saved `sample-app.html` file and open it with any modern web browser (e.g., Chrome, Firefox, Edge, Safari). You can usually do this by double-clicking the file.
+3.  **Interact:**
+    *   **Add Tasks:** Type a task description into the "Enter task..." input field, select a priority and an optional due date, then click "Add Task".
+    *   **Manage Tasks:** For each task in the list, click "Done"/"Undo" to toggle its completion status, "Edit" to modify its text, or "Delete" to remove it.
+    *   **Filter & Sort:** Use the "Filter" and "Sort" dropdowns to change how tasks are displayed.
+    *   **Search:** Use the "Search tasks..." input to find specific tasks.
+    *   **Bulk Actions:** Use the "Clear Completed", "Mark All Done", "Mark All Active", "Export JSON", and "Import JSON" buttons for group operations.
+    *   Tasks are automatically saved to your browser's local storage and will be present when you reopen the page.
