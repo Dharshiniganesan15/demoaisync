@@ -183,9 +183,16 @@
       <div class="row" style="grid-template-columns: 1fr;">
         <div class="meta" id="summary">0 tasks</div>
       </div>
+      <div class="row" style="grid-template-columns: repeat(4, auto); justify-content: start;">
+        <button id="markAllDoneBtn" class="button-clear">Mark All Done</button>
+        <button id="markAllActiveBtn" class="button-clear">Mark All Active</button>
+        <button id="exportBtn" class="button-clear">Export JSON</button>
+        <button id="importBtn" class="button-clear">Import JSON</button>
+      </div>
 
       <ul id="taskList"></ul>
       <div id="emptyState" class="empty">No tasks yet. Add your first task.</div>
+      <input id="importFileInput" type="file" accept="application/json" style="display:none;" />
     </section>
   </main>
 
@@ -199,10 +206,16 @@
     const sortSelect = document.getElementById("sortSelect");
     const searchInput = document.getElementById("searchInput");
     const clearCompletedBtn = document.getElementById("clearCompletedBtn");
+    const markAllDoneBtn = document.getElementById("markAllDoneBtn");
+    const markAllActiveBtn = document.getElementById("markAllActiveBtn");
+    const exportBtn = document.getElementById("exportBtn");
+    const importBtn = document.getElementById("importBtn");
+    const importFileInput = document.getElementById("importFileInput");
     const summary = document.getElementById("summary");
     const emptyState = document.getElementById("emptyState");
     const clock = document.getElementById("clock");
 
+    const STORAGE_KEY = "demoaisync_task_manager_v2";
     const tasks = [];
 
     function formatDateTime(d = new Date()) {
@@ -224,6 +237,30 @@
       };
     }
 
+    function saveTasks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    function loadTasks() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return;
+        const clean = parsed
+          .filter((t) => t && typeof t.text === "string")
+          .map((t) => ({
+            id: t.id || crypto.randomUUID(),
+            text: t.text.trim(),
+            priority: t.priority || "medium",
+            dueDate: t.dueDate || "",
+            done: Boolean(t.done),
+            createdAt: t.createdAt || new Date().toISOString(),
+          }));
+        tasks.splice(0, tasks.length, ...clean);
+      } catch (_) {}
+    }
+
     function addTask() {
       const text = taskInput.value.trim();
       if (!text) return;
@@ -231,6 +268,7 @@
       taskInput.value = "";
       prioritySelect.value = "medium";
       dueDateInput.value = "";
+      saveTasks();
       render();
       taskInput.focus();
     }
@@ -238,6 +276,7 @@
     function toggleTask(id) {
       const item = tasks.find((t) => t.id === id);
       if (item) item.done = !item.done;
+      saveTasks();
       render();
     }
 
@@ -249,12 +288,14 @@
       const trimmed = updatedText.trim();
       if (!trimmed) return;
       task.text = trimmed;
+      saveTasks();
       render();
     }
 
     function removeTask(id) {
       const index = tasks.findIndex((t) => t.id === id);
       if (index >= 0) tasks.splice(index, 1);
+      saveTasks();
       render();
     }
 
@@ -262,7 +303,68 @@
       for (let i = tasks.length - 1; i >= 0; i -= 1) {
         if (tasks[i].done) tasks.splice(i, 1);
       }
+      saveTasks();
       render();
+    }
+
+    function markAllDone() {
+      tasks.forEach((t) => {
+        t.done = true;
+      });
+      saveTasks();
+      render();
+    }
+
+    function markAllActive() {
+      tasks.forEach((t) => {
+        t.done = false;
+      });
+      saveTasks();
+      render();
+    }
+
+    function exportTasks() {
+      const payload = {
+        exportedAt: new Date().toISOString(),
+        tasks,
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `tasks-${new Date().toISOString().replace(/[:.]/g, "-")}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    function importTasksFromFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || "{}"));
+          const incoming = Array.isArray(parsed) ? parsed : parsed.tasks;
+          if (!Array.isArray(incoming)) throw new Error("Invalid format");
+          const clean = incoming
+            .filter((t) => t && typeof t.text === "string")
+            .map((t) => ({
+              id: t.id || crypto.randomUUID(),
+              text: t.text.trim(),
+              priority: t.priority || "medium",
+              dueDate: t.dueDate || "",
+              done: Boolean(t.done),
+              createdAt: t.createdAt || new Date().toISOString(),
+            }));
+          tasks.splice(0, tasks.length, ...clean);
+          saveTasks();
+          render();
+        } catch (_) {
+          window.alert("Invalid JSON file.");
+        }
+      };
+      reader.readAsText(file);
     }
 
     function getFilteredTasks() {
@@ -345,6 +447,8 @@
       clearCompletedBtn.disabled = doneCount === 0;
       clearCompletedBtn.style.opacity = doneCount === 0 ? "0.6" : "1";
       clearCompletedBtn.style.cursor = doneCount === 0 ? "not-allowed" : "pointer";
+      markAllDoneBtn.disabled = tasks.length === 0 || doneCount === tasks.length;
+      markAllActiveBtn.disabled = doneCount === 0;
     }
 
     addBtn.addEventListener("click", addTask);
@@ -355,7 +459,17 @@
     sortSelect.addEventListener("change", render);
     searchInput.addEventListener("input", render);
     clearCompletedBtn.addEventListener("click", clearCompletedTasks);
+    markAllDoneBtn.addEventListener("click", markAllDone);
+    markAllActiveBtn.addEventListener("click", markAllActive);
+    exportBtn.addEventListener("click", exportTasks);
+    importBtn.addEventListener("click", () => importFileInput.click());
+    importFileInput.addEventListener("change", (e) => {
+      const file = e.target.files && e.target.files[0];
+      importTasksFromFile(file);
+      importFileInput.value = "";
+    });
 
+    loadTasks();
     setInterval(renderClock, 1000);
     renderClock();
     render();
