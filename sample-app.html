@@ -77,6 +77,9 @@
       color: #fff;
       font-weight: 600;
     }
+    .button-clear {
+      background: #334155;
+    }
     ul {
       list-style: none;
       margin: 0;
@@ -126,22 +129,21 @@
     </header>
 
     <section class="content">
-      <div class="row" style="grid-template-columns: 1fr 140px auto;">
+      <div class="row">
         <input id="taskInput" type="text" placeholder="Enter task..." />
-        <select id="prioritySelect">
-          <option value="high">High</option>
-          <option value="medium" selected>Medium</option>
-          <option value="low">Low</option>
-        </select>
         <button id="addBtn">Add Task</button>
       </div>
 
-      <div class="row" style="grid-template-columns: 200px 1fr;">
+      <div class="row" style="grid-template-columns: 200px 1fr auto;">
         <select id="filterSelect">
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="done">Done</option>
         </select>
+        <input id="searchInput" type="text" placeholder="Search tasks..." />
+        <button id="clearCompletedBtn" class="button-clear">Clear Completed</button>
+      </div>
+      <div class="row" style="grid-template-columns: 1fr;">
         <div class="meta" id="summary">0 tasks</div>
       </div>
 
@@ -153,14 +155,14 @@
   <script>
     const taskInput = document.getElementById("taskInput");
     const addBtn = document.getElementById("addBtn");
-    const prioritySelect = document.getElementById("prioritySelect");
     const taskList = document.getElementById("taskList");
     const filterSelect = document.getElementById("filterSelect");
+    const searchInput = document.getElementById("searchInput");
+    const clearCompletedBtn = document.getElementById("clearCompletedBtn");
     const summary = document.getElementById("summary");
     const emptyState = document.getElementById("emptyState");
     const clock = document.getElementById("clock");
 
-    const STORAGE_KEY = "demoaisync_tasks_v1";
     const tasks = [];
 
     function formatDateTime(d = new Date()) {
@@ -171,38 +173,20 @@
       clock.textContent = formatDateTime();
     }
 
-    function createTask(text, priority) {
+    function createTask(text) {
       return {
         id: crypto.randomUUID(),
         text: text.trim(),
-        priority: priority || "medium",
         done: false,
         createdAt: new Date().toISOString(),
       };
     }
 
-    function saveTasks() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    }
-
-    function loadTasks() {
-      try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) {
-          tasks.splice(0, tasks.length, ...parsed);
-        }
-      } catch (_) {}
-    }
-
     function addTask() {
       const text = taskInput.value.trim();
       if (!text) return;
-      tasks.unshift(createTask(text, prioritySelect.value));
+      tasks.unshift(createTask(text));
       taskInput.value = "";
-      prioritySelect.value = "medium";
-      saveTasks();
       render();
       taskInput.focus();
     }
@@ -210,29 +194,33 @@
     function toggleTask(id) {
       const item = tasks.find((t) => t.id === id);
       if (item) item.done = !item.done;
-      saveTasks();
       render();
     }
 
     function removeTask(id) {
       const index = tasks.findIndex((t) => t.id === id);
       if (index >= 0) tasks.splice(index, 1);
-      saveTasks();
+      render();
+    }
+
+    function clearCompletedTasks() {
+      for (let i = tasks.length - 1; i >= 0; i -= 1) {
+        if (tasks[i].done) tasks.splice(i, 1);
+      }
       render();
     }
 
     function getFilteredTasks() {
       const f = filterSelect.value;
-      const priorityOrder = { high: 0, medium: 1, low: 2 };
-      const list =
+      const query = searchInput.value.trim().toLowerCase();
+      const statusFiltered =
         f === "active"
           ? tasks.filter((t) => !t.done)
           : f === "done"
             ? tasks.filter((t) => t.done)
             : tasks;
-      return [...list].sort(
-        (a, b) => (priorityOrder[a.priority] ?? 99) - (priorityOrder[b.priority] ?? 99),
-      );
+      if (!query) return statusFiltered;
+      return statusFiltered.filter((t) => t.text.toLowerCase().includes(query));
     }
 
     function render() {
@@ -244,7 +232,7 @@
         li.innerHTML = `
           <div>
             <div class="${task.done ? "done" : ""}">${task.text}</div>
-            <div class="meta">Priority: ${(task.priority || "medium").toUpperCase()} | Created: ${new Date(task.createdAt).toLocaleString()}</div>
+            <div class="meta">Created: ${new Date(task.createdAt).toLocaleString()}</div>
           </div>
           <div class="controls">
             <button class="btn-success">${task.done ? "Undo" : "Done"}</button>
@@ -259,8 +247,10 @@
       });
 
       const doneCount = tasks.filter((t) => t.done).length;
-      summary.textContent = `${tasks.length} tasks (${doneCount} done)`;
+      summary.textContent = `${tasks.length} tasks (${doneCount} done) | Showing ${rows.length}`;
       emptyState.style.display = rows.length ? "none" : "block";
+      clearCompletedBtn.disabled = doneCount === 0;
+      clearCompletedBtn.style.opacity = doneCount === 0 ? "0.6" : "1";
     }
 
     addBtn.addEventListener("click", addTask);
@@ -268,8 +258,9 @@
       if (e.key === "Enter") addTask();
     });
     filterSelect.addEventListener("change", render);
+    searchInput.addEventListener("input", render);
+    clearCompletedBtn.addEventListener("click", clearCompletedTasks);
 
-    loadTasks();
     setInterval(renderClock, 1000);
     renderClock();
     render();
