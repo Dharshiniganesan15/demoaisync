@@ -14,7 +14,16 @@ def divide(a, b):
     if b == 0:
         raise ValueError("Cannot divide by zero.")
     return a / b
-
+def calculate(a, b, operator):
+    if operator == "+":
+        return add(a, b)
+    if operator == "-":
+        return subtract(a, b)
+    if operator == "*":
+        return multiply(a, b)
+    if operator == "/":
+        return divide(a, b)
+    raise ValueError("Unsupported operator. Use one of: +, -, *, /")
 
 def calculate(a, b, operator):
     if operator == "+":
