@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo AI Sync - Sample App</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --primary: #2563eb;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --border: #dbe3ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    .app {
+      width: min(900px, 100%);
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+    }
+    header {
+      background: #0f172a;
+      color: #fff;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+    header span {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+    }
+    .content {
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+    }
+    input, select, button {
+      font: inherit;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+    }
+    input:focus, select:focus {
+      outline: 2px solid #bfdbfe;
+      border-color: #93c5fd;
+    }
+    button {
+      cursor: pointer;
+      border: 0;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+    li {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      background: #fff;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 3px;
+    }
+    .controls {
+      display: flex;
+      gap: 6px;
+    }
+    .done {
+      text-decoration: line-through;
+      color: #64748b;
+    }
+    .btn-success { background: var(--success); }
+    .btn-danger { background: var(--danger); }
+    .empty {
+      padding: 20px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>Demo AI Sync - Task Board</h1>
+      <span id="clock"></span>
+    </header>
+
+    <section class="content">
+      <div class="row">
+        <input id="taskInput" type="text" placeholder="Enter task..." />
+        <button id="addBtn">Add Task</button>
+      </div>
+
+      <div class="row" style="grid-template-columns: 200px 1fr;">
+        <select id="filterSelect">
+          <option value="all">All</option>
+          <option value="active">Active</option>
+          <option value="done">Done</option>
+        </select>
+        <div class="meta" id="summary">0 tasks</div>
+      </div>
+
+      <ul id="taskList"></ul>
+      <div id="emptyState" class="empty">No tasks yet. Add your first task.</div>
+    </section>
+  </main>
+
+  <script>
+    const taskInput = document.getElementById("taskInput");
+    const addBtn = document.getElementById("addBtn");
+    const taskList = document.getElementById("taskList");
+    const filterSelect = document.getElementById("filterSelect");
+    const summary = document.getElementById("summary");
+    const emptyState = document.getElementById("emptyState");
+    const clock = document.getElementById("clock");
+
+    const tasks = [];
+
+    function formatDateTime(d = new Date()) {
+      return d.toLocaleString();
+    }
+
+    function renderClock() {
+      clock.textContent = formatDateTime();
+    }
+
+    function createTask(text) {
+      return {
+        id: crypto.randomUUID(),
+        text: text.trim(),
+        done: false,
+        createdAt: new Date().toISOString(),
+      };
+    }
+
+    function addTask() {
+      const text = taskInput.value.trim();
+      if (!text) return;
+      tasks.unshift(createTask(text));
+      taskInput.value = "";
+      render();
+      taskInput.focus();
+    }
+
+    function toggleTask(id) {
+      const item = tasks.find((t) => t.id === id);
+      if (item) item.done = !item.done;
+      render();
+    }
+
+    function removeTask(id) {
+      const index = tasks.findIndex((t) => t.id === id);
+      if (index >= 0) tasks.splice(index, 1);
+      render();
+    }
+
+    function getFilteredTasks() {
+      const f = filterSelect.value;
+      if (f === "active") return tasks.filter((t) => !t.done);
+      if (f === "done") return tasks.filter((t) => t.done);
+      return tasks;
+    }
+
+    function render() {
+      const rows = getFilteredTasks();
+      taskList.innerHTML = "";
+
+      rows.forEach((task) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div>
+            <div class="${task.done ? "done" : ""}">${task.text}</div>
+            <div class="meta">Created: ${new Date(task.createdAt).toLocaleString()}</div>
+          </div>
+          <div class="controls">
+            <button class="btn-success">${task.done ? "Undo" : "Done"}</button>
+            <button class="btn-danger">Delete</button>
+          </div>
+        `;
+
+        const [toggleBtn, deleteBtn] = li.querySelectorAll("button");
+        toggleBtn.addEventListener("click", () => toggleTask(task.id));
+        deleteBtn.addEventListener("click", () => removeTask(task.id));
+        taskList.appendChild(li);
+      });
+
+      const doneCount = tasks.filter((t) => t.done).length;
+      summary.textContent = `${tasks.length} tasks (${doneCount} done)`;
+      emptyState.style.display = rows.length ? "none" : "block";
+    }
+
+    addBtn.addEventListener("click", addTask);
+    taskInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") addTask();
+    });
+    filterSelect.addEventListener("change", render);
+
+    setInterval(renderClock, 1000);
+    renderClock();
+    render();
+  </script>
+</body>
+</html>
