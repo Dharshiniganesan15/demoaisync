@@ -27,7 +27,7 @@
       padding: 20px;
     }
     .app {
-      width: min(900px, 100%);
+      width: min(980px, 100%);
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 14px;
@@ -102,6 +102,30 @@
       font-size: 0.85rem;
       margin-top: 3px;
     }
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .priority-high {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    .priority-medium {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .priority-low {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .overdue {
+      color: #dc2626;
+      font-weight: 700;
+    }
     .controls {
       display: flex;
       gap: 6px;
@@ -129,20 +153,33 @@
     </header>
 
     <section class="content">
-      <div class="row">
+      <div class="row" style="grid-template-columns: 1fr 130px 130px auto;">
         <input id="taskInput" type="text" placeholder="Enter task..." />
+        <select id="prioritySelect">
+          <option value="high">High</option>
+          <option value="medium" selected>Medium</option>
+          <option value="low">Low</option>
+        </select>
+        <input id="dueDateInput" type="date" />
         <button id="addBtn">Add Task</button>
       </div>
 
-      <div class="row" style="grid-template-columns: 200px 1fr auto;">
+      <div class="row" style="grid-template-columns: 160px 160px 1fr auto;">
         <select id="filterSelect">
           <option value="all">All</option>
           <option value="active">Active</option>
           <option value="done">Done</option>
         </select>
+        <select id="sortSelect">
+          <option value="newest">Sort: Newest</option>
+          <option value="oldest">Sort: Oldest</option>
+          <option value="priority">Sort: Priority</option>
+          <option value="due">Sort: Due Date</option>
+        </select>
         <input id="searchInput" type="text" placeholder="Search tasks..." />
         <button id="clearCompletedBtn" class="button-clear">Clear Completed</button>
       </div>
+
       <div class="row" style="grid-template-columns: 1fr;">
         <div class="meta" id="summary">0 tasks</div>
       </div>
@@ -154,9 +191,12 @@
 
   <script>
     const taskInput = document.getElementById("taskInput");
+    const prioritySelect = document.getElementById("prioritySelect");
+    const dueDateInput = document.getElementById("dueDateInput");
     const addBtn = document.getElementById("addBtn");
     const taskList = document.getElementById("taskList");
     const filterSelect = document.getElementById("filterSelect");
+    const sortSelect = document.getElementById("sortSelect");
     const searchInput = document.getElementById("searchInput");
     const clearCompletedBtn = document.getElementById("clearCompletedBtn");
     const summary = document.getElementById("summary");
@@ -173,10 +213,12 @@
       clock.textContent = formatDateTime();
     }
 
-    function createTask(text) {
+    function createTask(text, priority, dueDate) {
       return {
         id: crypto.randomUUID(),
         text: text.trim(),
+        priority: priority || "medium",
+        dueDate: dueDate || "",
         done: false,
         createdAt: new Date().toISOString(),
       };
@@ -185,8 +227,10 @@
     function addTask() {
       const text = taskInput.value.trim();
       if (!text) return;
-      tasks.unshift(createTask(text));
+      tasks.unshift(createTask(text, prioritySelect.value, dueDateInput.value));
       taskInput.value = "";
+      prioritySelect.value = "medium";
+      dueDateInput.value = "";
       render();
       taskInput.focus();
     }
@@ -194,6 +238,17 @@
     function toggleTask(id) {
       const item = tasks.find((t) => t.id === id);
       if (item) item.done = !item.done;
+      render();
+    }
+
+    function editTask(id) {
+      const task = tasks.find((t) => t.id === id);
+      if (!task) return;
+      const updatedText = window.prompt("Edit task", task.text);
+      if (updatedText == null) return;
+      const trimmed = updatedText.trim();
+      if (!trimmed) return;
+      task.text = trimmed;
       render();
     }
 
@@ -211,16 +266,40 @@
     }
 
     function getFilteredTasks() {
-      const f = filterSelect.value;
+      const status = filterSelect.value;
       const query = searchInput.value.trim().toLowerCase();
+
       const statusFiltered =
-        f === "active"
+        status === "active"
           ? tasks.filter((t) => !t.done)
-          : f === "done"
+          : status === "done"
             ? tasks.filter((t) => t.done)
             : tasks;
-      if (!query) return statusFiltered;
-      return statusFiltered.filter((t) => t.text.toLowerCase().includes(query));
+
+      const textFiltered = !query
+        ? statusFiltered
+        : statusFiltered.filter((t) => t.text.toLowerCase().includes(query));
+
+      const priorityRank = { high: 0, medium: 1, low: 2 };
+      const sortBy = sortSelect.value;
+      const sorted = [...textFiltered];
+
+      if (sortBy === "oldest") {
+        sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      } else if (sortBy === "priority") {
+        sorted.sort((a, b) => (priorityRank[a.priority] ?? 9) - (priorityRank[b.priority] ?? 9));
+      } else if (sortBy === "due") {
+        sorted.sort((a, b) => {
+          if (!a.dueDate && !b.dueDate) return 0;
+          if (!a.dueDate) return 1;
+          if (!b.dueDate) return -1;
+          return new Date(a.dueDate) - new Date(b.dueDate);
+        });
+      } else {
+        sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+
+      return sorted;
     }
 
     function render() {
@@ -228,20 +307,34 @@
       taskList.innerHTML = "";
 
       rows.forEach((task) => {
+        const dueLabel = task.dueDate
+          ? `Due: ${new Date(task.dueDate).toLocaleDateString()}`
+          : "Due: Not set";
+        const overdue =
+          Boolean(task.dueDate) &&
+          !task.done &&
+          new Date(task.dueDate).setHours(23, 59, 59, 999) < Date.now();
+
         const li = document.createElement("li");
         li.innerHTML = `
           <div>
             <div class="${task.done ? "done" : ""}">${task.text}</div>
+            <div class="meta">
+              <span class="badge priority-${task.priority || "medium"}">${(task.priority || "medium").toUpperCase()}</span>
+              <span class="${overdue ? "overdue" : ""}">${dueLabel}</span>
+            </div>
             <div class="meta">Created: ${new Date(task.createdAt).toLocaleString()}</div>
           </div>
           <div class="controls">
             <button class="btn-success">${task.done ? "Undo" : "Done"}</button>
+            <button class="button-clear">Edit</button>
             <button class="btn-danger">Delete</button>
           </div>
         `;
 
-        const [toggleBtn, deleteBtn] = li.querySelectorAll("button");
+        const [toggleBtn, editBtn, deleteBtn] = li.querySelectorAll("button");
         toggleBtn.addEventListener("click", () => toggleTask(task.id));
+        editBtn.addEventListener("click", () => editTask(task.id));
         deleteBtn.addEventListener("click", () => removeTask(task.id));
         taskList.appendChild(li);
       });
@@ -251,6 +344,7 @@
       emptyState.style.display = rows.length ? "none" : "block";
       clearCompletedBtn.disabled = doneCount === 0;
       clearCompletedBtn.style.opacity = doneCount === 0 ? "0.6" : "1";
+      clearCompletedBtn.style.cursor = doneCount === 0 ? "not-allowed" : "pointer";
     }
 
     addBtn.addEventListener("click", addTask);
@@ -258,6 +352,7 @@
       if (e.key === "Enter") addTask();
     });
     filterSelect.addEventListener("change", render);
+    sortSelect.addEventListener("change", render);
     searchInput.addEventListener("input", render);
     clearCompletedBtn.addEventListener("click", clearCompletedTasks);
 
@@ -266,5 +361,4 @@
     render();
   </script>
 </body>
-
 </html>
