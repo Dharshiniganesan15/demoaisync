@@ -1,56 +1,61 @@
-# Simple Arithmetic Operations
+# Arithmetic Operations
 
-This project contains a minimal Python module designed for basic arithmetic.
+This repository contains a simple Python module (`app.py`) providing fundamental arithmetic operations.
 
-## Programming Languages
+## `app.py`
 
-*   Python
+This file defines three functions for basic mathematical calculations: addition, subtraction, and multiplication.
 
-## Code Overview
+### `add(a, b)`
 
-The project consists of a single Python file:
+**Description:**
+This function calculates the sum of two numbers.
 
-*   `app.py`: Contains a function for performing addition.
+**Parameters:**
+*   `a`: The first number.
+*   `b`: The second number.
 
-### `app.py`
+**Returns:**
+The result of `a + b`.
 
-This file defines a single function:
-
-#### `add(a, b)`
-
-This function performs the addition of two inputs.
-
-*   **Parameters:**
-    *   `a`: The first operand.
-    *   `b`: The second operand.
-*   **Returns:**
-    *   The result of `a + b`. The exact behavior depends on the data types of `a` and `b`, as Python's `+` operator supports various operations (e.g., numerical addition, string concatenation, list concatenation).
-
-## Usage
-
-To use the `add` function, you can import it from the `app` module into any Python script or an interactive Python session.
-
+**Example Usage:**
 ```python
-# Assuming app.py is in the same directory or on the Python path
-from app import add
+# Assuming the function is accessible
+result = add(5, 3)  # result will be 8
+```
 
-# Example 1: Adding two numbers (integers)
-sum_of_integers = add(5, 3)
-print(f"Result of add(5, 3): {sum_of_integers}")
-# Expected Output: Result of add(5, 3): 8
+### `sub(a, b)`
 
-# Example 2: Adding two numbers (floats)
-sum_of_floats = add(10.5, 2.3)
-print(f"Result of add(10.5, 2.3): {sum_of_floats}")
-# Expected Output: Result of add(10.5, 2.3): 12.8
+**Description:**
+This function calculates the difference between two numbers.
 
-# Example 3: Concatenating two strings
-concatenated_string = add("Hello, ", "World!")
-print(f"Result of add('Hello, ', 'World!'): '{concatenated_string}'")
-# Expected Output: Result of add('Hello, ', 'World!'): 'Hello, World!'
+**Parameters:**
+*   `a`: The number from which `b` is subtracted (minuend).
+*   `b`: The number to be subtracted (subtrahend).
 
-# Example 4: Concatenating two lists
-concatenated_list = add([1, 2], [3, 4])
-print(f"Result of add([1, 2], [3, 4]): {concatenated_list}")
-# Expected Output: Result of add([1, 2], [3, 4]): [1, 2, 3, 4]
+**Returns:**
+The result of `a - b`.
+
+**Example Usage:**
+```python
+# Assuming the function is accessible
+result = sub(10, 4)  # result will be 6
+```
+
+### `mul(a, b)`
+
+**Description:**
+This function calculates the product of two numbers.
+
+**Parameters:**
+*   `a`: The first number.
+*   `b`: The second number.
+
+**Returns:**
+The result of `a * b`.
+
+**Example Usage:**
+```python
+# Assuming the function is accessible
+result = mul(7, 2)  # result will be 14
 ```
