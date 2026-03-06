@@ -1,223 +1,135 @@
-<<<<<<< HEAD
-# Codebase Documentation
+# Project Documentation
 
-This document provides a comprehensive overview of the codebase, adhering strictly to the provided files and their contents without inferring or inventing features.
+This document provides a comprehensive overview of the codebase, strictly adhering to the provided files and their contents.
 
-## File: app.py
+## Overview
 
-This file is currently empty. It does not contain any Python code or functionality.
+The project currently consists of a single HTML file (`sample-app.html`) that implements a client-side task management application, and an empty Python file (`app.py`). The task application, titled "Demo AI Sync - Task Board," runs entirely in the browser and provides functionalities for adding, managing, and filtering tasks.
 
-## File: sample-app.html
+## Files Documented
 
-The `sample-app.html` file defines a single-page web application titled **"Demo AI Sync - Sample App"**. It is structured as a task board interface, incorporating HTML for structure, CSS for styling, and JavaScript for interactive functionality.
-=======
-This document provides a comprehensive overview of the codebase, adhering strictly to the provided files and their contents without inferring or inventing features.
+### `app.py`
 
----
+This file is present in the project but is **empty**. There is no Python code or functionality to document.
 
-# Codebase Documentation
+### `sample-app.html`
 
-This codebase comprises a Python file (`app.py`) and an HTML file (`sample-app.html`) which includes embedded CSS and JavaScript.
+This is a standalone HTML document that contains a complete client-side task board application. It leverages HTML for structure, CSS for styling, and JavaScript for all interactive logic.
 
-## File: `app.py`
+#### Description
 
-This file is currently empty. It does not contain any Python code or functionality.
+`sample-app.html` creates an interactive "Task Board" where users can manage their tasks. It features a responsive design and includes various controls for task input, filtering, sorting, and searching. All task data is stored in memory within the browser and is not persisted.
 
-## File: `sample-app.html`
+#### Features
 
-The `sample-app.html` file defines a single-page web application titled "Demo AI Sync - Sample App". It is structured as a task board interface, incorporating HTML for structure, CSS for styling, and JavaScript for interactive functionality.
->>>>>>> 30847a53d184fb6cbf6fb8c4519324b25085d5bd
+The application provides the following functionalities:
 
-### HTML Structure
+*   **Task Creation:**
+    *   Input field for task description.
+    *   Dropdown for selecting task priority (High, Medium, Low).
+    *   Date picker for setting a due date.
+    *   "Add Task" button to create a new task. Newly added tasks appear at the top of the list.
+*   **Task Management:**
+    *   **Toggle Completion:** Mark tasks as "Done" or "Undo" their completion status. Completed tasks are visually struck through.
+    *   **Edit Task:** Prompt to edit the text description of an existing task.
+    *   **Delete Task:** Remove individual tasks from the list.
+*   **Task Filtering:**
+    *   Filter tasks by status: "All", "Active" (not done), or "Done".
+*   **Task Sorting:**
+    *   Sort tasks by: "Newest" (default, by creation date descending), "Oldest" (by creation date ascending), "Priority" (High > Medium > Low), or "Due Date" (ascending, tasks without a due date appear last).
+*   **Task Search:**
+    *   Live search functionality to find tasks by text content.
+*   **Task Status Indicators:**
+    *   Displays task priority using colored badges (HIGH, MEDIUM, LOW).
+    *   Indicates if a task is "Overdue" if it has a due date in the past and is not marked as done.
+    *   Shows the creation date and due date for each task.
+*   **Summary and Empty State:**
+    *   Displays a summary of total tasks, done tasks, and currently visible tasks.
+    *   Shows a "No tasks yet" message when the task list is empty or all tasks are filtered out.
+*   **Clear Completed Tasks:**
+    *   A button to remove all tasks that are marked as "Done". This button is disabled when no tasks are completed.
+*   **Real-time Clock:**
+    *   A clock in the header displays the current date and time, updating every second.
 
-The HTML provides the basic layout and elements for the task management application:
+#### Technologies Used
 
-<<<<<<< HEAD
-- Document Metadata: Sets character encoding to UTF-8, configures the viewport for responsiveness, and sets the page title to "Demo AI Sync - Sample App".
-- Main Application Container: A `main` element with the class `app` wraps the entire application content.
-- Header:
-- Displays the application title "Demo AI Sync - Task Board" (`h1`).
-- Includes a `span` with `id="clock"` to display the current date and time, dynamically updated by JavaScript.
-- Content Section: A `section` with the class `content` contains the interactive elements of the task board.
-- Add Task Row:
-- An input field (`id="taskInput"`) for entering new task descriptions.
-- A button (`id="addBtn"`) to add the entered task.
-- Filtering and Searching Row:
-- A select dropdown (`id="filterSelect"`) with options to filter tasks by status: "All", "Active", and "Done".
-- An input field (`id="searchInput"`) for searching tasks by text.
-- A button (`id="clearCompletedBtn"`) with class `button-clear` to remove all completed tasks. This button's disabled state and opacity are controlled by JavaScript.
-- Summary Row:
-- A `div` with `id="summary"` that displays a summary of tasks, including total tasks, completed tasks, and the number of currently displayed tasks.
-- Task List: An unordered list (`ul` with `id="taskList"`) where individual task items (`li`) are dynamically rendered by JavaScript.
-- Empty State: A `div` with `id="emptyState"` and class `empty` that is displayed when no tasks match the current filters or search query.
-=======
-*   **Document Metadata:** Sets character encoding to UTF-8, configures the viewport for responsiveness, and sets the page title to "Demo AI Sync - Sample App".
-*   **Main Application Container:** A `main` element with the class `app` wraps the entire application content.
-*   **Header:**
-    *   Displays the application title "Demo AI Sync - Task Board" (`h1`).
-    *   Includes a `span` with `id="clock"` to display the current date and time, dynamically updated by JavaScript.
-*   **Content Section:** A `section` with the class `content` contains the interactive elements of the task board.
-    *   **Add Task Row:**
-        *   An `input` field (`id="taskInput"`) for entering new task descriptions.
-        *   A `button` (`id="addBtn"`) to add the entered task.
-    *   **Filtering and Searching Row:**
-        *   A `select` dropdown (`id="filterSelect"`) with options to filter tasks by status: "All", "Active", and "Done".
-        *   An `input` field (`id="searchInput"`) for searching tasks by text.
-        *   A `button` (`id="clearCompletedBtn"`) with class `button-clear` to remove all completed tasks. This button's disabled state and opacity are controlled by JavaScript.
-    *   **Summary Row:**
-        *   A `div` with `id="summary"` that displays a summary of tasks, including total tasks, completed tasks, and the number of currently displayed tasks.
-    *   **Task List:** An unordered list (`ul` with `id="taskList"`) where individual task items (`li`) are dynamically rendered by JavaScript.
-    *   **Empty State:** A `div` with `id="emptyState"` and class `empty` that is displayed when no tasks match the current filters or search query.
->>>>>>> 30847a53d184fb6cbf6fb8c4519324b25085d5bd
+*   **HTML5:** Provides the structure and content of the web page.
+*   **CSS3:** Embedded within the `<style>` tags, it provides all the styling for the application, including a custom color palette defined using CSS variables and responsive layout principles.
+*   **JavaScript (ES6+):** Embedded within the `<script>` tags, it handles all the application logic, including DOM manipulation, event handling, data management (in-memory array), and UI updates.
 
-### CSS Styling
+#### File Structure
 
-The embedded CSS defines the visual appearance of the application, using CSS variables for consistent theming:
+The `sample-app.html` file is a single, self-contained document with the following sections:
 
-<<<<<<< HEAD
-- Root Variables: Defines custom properties for colors (`--bg`, `--card`, `--text`, `--muted`, `--primary`, `--success`, `--danger`, `--border`).
-- Global Styles: Sets `box-sizing` to `border-box` for all elements.
-- Body Styling: Configures font family, background gradient, text color, and centers the application vertically and horizontally.
-- Application Container (`.app`): Styles the main application box with background, borders, rounded corners, and a subtle shadow.
-- Header Styling: Sets a dark background, white text, padding, and uses flexbox for alignment of the title and clock.
-- Content Section (`.content`): Applies padding and uses a grid layout for its direct children.
-- Row Layout (`.row`): Uses CSS Grid for horizontal arrangement of elements within rows. Specific grid column templates are applied to different rows.
-- Form Controls (`input`, `select`, `button`): Provides consistent styling for input fields, select boxes, and buttons, including border-radius, padding, and focus states.
-- Buttons: Defines default button styles for background, text color, and font weight. Specific styles are provided for `.button-clear`, `.btn-success`, and `.btn-danger`.
-- Task List (`ul`): Removes default list styling and uses a grid layout for spacing.
-- Task Item (`li`): Styles individual task items with borders, rounded corners, padding, and a grid layout to arrange task text/meta and controls.
-- Meta Information (`.meta`): Styles for secondary text, such as task creation time.
-- Controls Container (`.controls`): Uses flexbox to arrange buttons within a task item.
-- Completed Task (`.done`): Applies `text-decoration: line-through` and changes color for completed tasks.
-- Empty State (`.empty`): Styles the message displayed when no tasks are present.
-=======
-*   **Root Variables:** Defines custom properties for colors (`--bg`, `--card`, `--text`, `--muted`, `--primary`, `--success`, `--danger`, `--border`).
-*   **Global Styles:** Sets `box-sizing` to `border-box` for all elements.
-*   **Body Styling:** Configures font family, background gradient, text color, and centers the application vertically and horizontally.
-*   **Application Container (`.app`):** Styles the main application box with background, borders, rounded corners, and a subtle shadow.
-*   **Header Styling:** Sets a dark background, white text, padding, and uses flexbox for alignment of the title and clock.
-*   **Content Section (`.content`):** Applies padding and uses a grid layout for its direct children.
-*   **Row Layout (`.row`):** Uses CSS Grid for horizontal arrangement of elements within rows. Specific grid column templates are applied to different rows.
-*   **Form Controls (Input, Select, Button):** Provides consistent styling for input fields, select boxes, and buttons, including border-radius, padding, and focus states.
-*   **Buttons:** Defines default button styles for background, text color, and font weight. Specific styles are provided for `.button-clear`, `.btn-success`, and `.btn-danger`.
-*   **Task List (`ul`):** Removes default list styling and uses a grid layout for spacing.
-*   **Task Item (`li`):** Styles individual task items with borders, rounded corners, padding, and a grid layout to arrange task text/meta and controls.
-*   **Meta Information (`.meta`):** Styles for secondary text, such as task creation time.
-*   **Controls Container (`.controls`):** Uses flexbox to arrange buttons within a task item.
-*   **Completed Task (`.done`):** Applies `text-decoration: line-through` and changes color for completed tasks.
-*   **Empty State (`.empty`):** Styles the message displayed when no tasks are present.
->>>>>>> 30847a53d184fb6cbf6fb8c4519324b25085d5bd
+1.  **`<!doctype html>` and `<html>` root:** Standard HTML5 document declaration.
+2.  **`<head>`:**
+    *   `meta` tags for character set and viewport configuration.
+    *   `<title>`: Sets the browser tab title to "Demo AI Sync - Sample App".
+    *   `<style>` block: Contains all the CSS rules for the application's visual presentation.
+3.  **`<body>`:**
+    *   `<main class="app">`: The main container for the entire task board interface.
+        *   `<header>`: Contains the application title and the real-time clock display (`<span id="clock">`).
+        *   `<section class="content">`: The main interactive area.
+            *   `div.row` for task input controls: `taskInput` (text), `prioritySelect` (dropdown), `dueDateInput` (date), `addBtn` (button).
+            *   `div.row` for filtering/sorting/searching controls: `filterSelect` (dropdown), `sortSelect` (dropdown), `searchInput` (text), `clearCompletedBtn` (button).
+            *   `div.row` for `summary` (`div.meta`).
+            *   `<ul id="taskList">`: The unordered list where individual tasks are dynamically rendered by JavaScript.
+            *   `<div id="emptyState" class="empty">`: Message displayed when no tasks are visible.
+    *   `<script>` block: Contains all the JavaScript code that powers the application's interactivity.
 
-### JavaScript Functionality
+#### Styling (CSS)
 
-The embedded JavaScript provides the dynamic and interactive behavior of the task board application:
+The embedded CSS defines a clear and functional user interface. Key aspects include:
 
-<<<<<<< HEAD
-- DOM Element References: Stores references to key HTML elements for manipulation.
-- `tasks` Array: An array named `tasks` is initialized to store all task objects. Each task object includes `id`, `text`, `done` status, and `createdAt` timestamp.
-- `formatDateTime(d)`: A utility function that formats a given `Date` object (or the current date if none is provided) into a locale-specific string.
-- `renderClock()`: Updates the clock span element with the current date and time using `formatDateTime()`. This function is called every second by `setInterval`.
-- `createTask(text)`:
-- Generates a new task object.
-- Assigns a unique ID using `crypto.randomUUID()`.
-- Stores the trimmed text input.
-- Sets `done` to `false` initially.
-- Records the `createdAt` timestamp in ISO format.
-- `addTask()`:
-- Retrieves and trims the text from `taskInput`.
-- If the text is not empty, it creates a new task using `createTask()` and adds it to the beginning of the `tasks` array (`unshift`).
-- Clears the `taskInput` field.
-- Calls `render()` to update the UI.
-- Sets focus back to `taskInput`.
-- `toggleTask(id)`:
-- Finds a task in the `tasks` array by its `id`.
-- If found, it toggles the `done` status of that task.
-- Calls `render()` to update the UI.
-- `removeTask(id)`:
-- Finds the index of a task by its `id`.
-- If found, it removes the task from the `tasks` array using `splice`.
-- Calls `render()` to update the UI.
-- `clearCompletedTasks()`:
-- Iterates through the `tasks` array in reverse order.
-- Removes any task where `done` is `true` from the array.
-- Calls `render()` to update the UI.
-- `getFilteredTasks()`:
-- Filters the `tasks` array based on the selected value of `filterSelect` ("all", "active", "done").
-- Further filters the results based on the text entered in `searchInput`, performing a case-insensitive substring match.
-- Returns the array of filtered tasks.
-- `render()`:
-- Retrieves the list of tasks to display using `getFilteredTasks()`.
-- Clears the current content of `taskList`.
-- For each filtered task:
-- Creates a new `li` element.
-- Populates its `innerHTML` with the task text (applying the `done` class if completed), creation date (formatted), and two buttons: "Done"/"Undo" and "Delete".
-- Attaches click event listeners to these buttons to call `toggleTask()` and `removeTask()` respectively, passing the task's `id`.
-- Appends the `li` element to `taskList`.
-- Updates the `summary` div with the total number of tasks, the count of done tasks, and the number of tasks currently being shown.
-- Toggles the visibility of the `emptyState` message based on whether there are any tasks to display.
-- Enables/disables `clearCompletedBtn` and adjusts its opacity based on the count of completed tasks.
-- Event Listeners:
-- `addBtn` listens for click events to call `addTask()`.
-- `taskInput` listens for keydown events, calling `addTask()` if the "Enter" key is pressed.
-- `filterSelect` listens for change events to call `render()`.
-- `searchInput` listens for input events to call `render()`.
-- `clearCompletedBtn` listens for click events to call `clearCompletedTasks()`.
-- Initialization:
-- `setInterval(renderClock, 1000)`: Sets up a recurring timer to update the clock every 1000 milliseconds (1 second).
-- `renderClock()`: An immediate call to display the clock upon page load.
-- `render()`: An immediate call to render the initial (empty) task list upon page load.
-=======
-*   **DOM Element References:** Stores references to key HTML elements for manipulation.
-*   **`tasks` Array:** An array named `tasks` is initialized to store all task objects. Each task object includes `id`, `text`, `done` status, and `createdAt` timestamp.
-*   **`formatDateTime(d)`:** A utility function that formats a given `Date` object (or the current date if none is provided) into a locale-specific string.
-*   **`renderClock()`:** Updates the `clock` span element with the current date and time using `formatDateTime()`. This function is called every second by `setInterval`.
-*   **`createTask(text)`:**
-    *   Generates a new task object.
-    *   Assigns a unique ID using `crypto.randomUUID()`.
-    *   Stores the trimmed `text` input.
-    *   Sets `done` to `false` initially.
-    *   Records the `createdAt` timestamp in ISO format.
-*   **`addTask()`:**
-    *   Retrieves and trims the text from `taskInput`.
-    *   If the text is not empty, it creates a new task using `createTask()` and adds it to the beginning of the `tasks` array (`unshift`).
-    *   Clears the `taskInput` field.
-    *   Calls `render()` to update the UI.
-    *   Sets focus back to `taskInput`.
-*   **`toggleTask(id)`:**
-    *   Finds a task in the `tasks` array by its `id`.
-    *   If found, it toggles the `done` status of that task.
-    *   Calls `render()` to update the UI.
-*   **`removeTask(id)`:**
-    *   Finds the index of a task by its `id`.
-    *   If found, it removes the task from the `tasks` array using `splice`.
-    *   Calls `render()` to update the UI.
-*   **`clearCompletedTasks()`:**
-    *   Iterates through the `tasks` array in reverse order.
-    *   Removes any task where `done` is `true` from the array.
-    *   Calls `render()` to update the UI.
-*   **`getFilteredTasks()`:**
-    *   Filters the `tasks` array based on the selected value of `filterSelect` ("all", "active", "done").
-    *   Further filters the results based on the text entered in `searchInput`, performing a case-insensitive substring match.
-    *   Returns the array of filtered tasks.
-*   **`render()`:** This is the primary function responsible for updating the entire task list and related UI elements:
-    *   Retrieves the list of tasks to display using `getFilteredTasks()`.
-    *   Clears the current content of `taskList`.
-    *   For each filtered task:
-        *   Creates a new `li` element.
-        *   Populates its `innerHTML` with the task text (applying the `done` class if completed), creation date (formatted), and two buttons: "Done"/"Undo" and "Delete".
-        *   Attaches `click` event listeners to these buttons to call `toggleTask()` and `removeTask()` respectively, passing the task's `id`.
-        *   Appends the `li` element to `taskList`.
-    *   Updates the `summary` div with the total number of tasks, the count of done tasks, and the number of tasks currently being shown.
-    *   Toggles the visibility of the `emptyState` message based on whether there are any tasks to display.
-    *   Enables/disables the `clearCompletedBtn` and adjusts its opacity based on the count of completed tasks.
-*   **Event Listeners:**
-    *   `addBtn` listens for `click` events to call `addTask()`.
-    *   `taskInput` listens for `keydown` events, calling `addTask()` if the "Enter" key is pressed.
-    *   `filterSelect` listens for `change` events to call `render()`.
-    *   `searchInput` listens for `input` events to call `render()`.
-    *   `clearCompletedBtn` listens for `click` events to call `clearCompletedTasks()`.
+*   **CSS Custom Properties (Variables):** A `:root` block defines various colors (`--bg`, `--card`, `--text`, etc.) for easy theme management.
+*   **Layout:** Uses `display: grid` and `flex` for arranging elements, ensuring a structured and responsive layout. `min(980px, 100%)` ensures the app scales gracefully on different screen sizes.
+*   **Components:** Specific styles are applied to:
+    *   The overall app container, header, and content sections.
+    *   Input fields, select boxes, and buttons, including focus states.
+    *   Task list items (`<li>`), which are designed to display task text, priority, due date, creation date, and control buttons.
+    *   Priority badges (`.priority-high`, `.priority-medium`, `.priority-low`) with distinct background and text colors.
+    *   Visual indicators for overdue tasks (`.overdue`) and completed tasks (`.done`).
+    *   Styling for control buttons (success, danger, clear actions).
+    *   A dashed border style for the empty state message.
+
+#### JavaScript Functionality
+
+The JavaScript code manages the entire application logic:
+
+*   **DOM Element References:** All interactive HTML elements are referenced by their `id` using `document.getElementById()`.
+*   **`tasks` Array:** An in-memory array (`const tasks = []`) stores task objects. Each task object has an `id`, `text`, `priority`, `dueDate`, `done` status, and `createdAt` timestamp.
+*   **Utility Functions:**
+    *   `formatDateTime()`: Formats a `Date` object into a localized string.
+    *   `renderClock()`: Updates the header clock display.
+*   **Task CRUD (Create, Read, Update, Delete) Operations:**
+    *   `createTask()`: Generates a new task object with a `crypto.randomUUID()` for a unique ID.
+    *   `addTask()`: Gathers input, creates a new task, adds it to the `tasks` array, clears input fields, and triggers a UI `render`.
+    *   `toggleTask(id)`: Changes the `done` status of a task by its ID and triggers a `render`.
+    *   `editTask(id)`: Prompts the user to update a task's text and triggers a `render`.
+    *   `removeTask(id)`: Deletes a task by its ID from the array and triggers a `render`.
+    *   `clearCompletedTasks()`: Iterates and removes all tasks marked as `done`.
+*   **Filtering, Sorting, and Searching:**
+    *   `getFilteredTasks()`: This core function applies the current filter status ("all", "active", "done"), search query, and sorting order ("newest", "oldest", "priority", "due") to the `tasks` array. It returns a new array of tasks to be displayed.
+*   **`render()` Function:**
+    *   This is the central function for updating the UI. It clears the `taskList`, calls `getFilteredTasks()` to determine what to display, and then dynamically creates `<li>` elements for each task.
+    *   It calculates and applies `overdue` and `done` styling, and sets up event listeners for the "Done"/"Undo", "Edit", and "Delete" buttons on each task item.
+    *   It updates the `summary` text, toggles the `emptyState` visibility, and manages the disabled state and styling of the `clearCompletedBtn`.
+*   **Event Listeners:** Event listeners are attached to all interactive elements (`addBtn`, `taskInput` (for "Enter" key), `filterSelect`, `sortSelect`, `searchInput`, `clearCompletedBtn`) to trigger the appropriate JavaScript functions and re-render the UI.
 *   **Initialization:**
-    *   `setInterval(renderClock, 1000)`: Sets up a recurring timer to update the clock every 1000 milliseconds (1 second).
-    *   `renderClock()`: An immediate call to display the clock upon page load.
-    *   `render()`: An immediate call to render the initial (empty) task list upon page load.
->>>>>>> 30847a53d184fb6cbf6fb8c4519324b25085d5bd
+    *   `setInterval(renderClock, 1000)`: Sets up a recurring timer to update the clock every second.
+    *   `renderClock()`: Calls the clock renderer immediately on load.
+    *   `render()`: Performs an initial render of the task list when the page loads.
+
+#### Limitations
+
+*   **No Data Persistence:** All task data is stored in the browser's memory. If the page is refreshed or closed, all tasks will be lost. There is no server-side component (e.g., `app.py` is empty) or local storage integration to save data.
+*   **No Backend Integration:** The application is purely client-side and does not interact with any backend services for data storage, retrieval, or complex processing.
+
+## Usage
+
+To run the `sample-app.html` application:
+
+1.  **Save the file:** Save the provided HTML content as `sample-app.html` on your local machine.
+2.  **Open in Browser:** Open the `sample-app.html` file using any modern web browser (e.g., Chrome, Firefox, Safari, Edge).
+
+The task board application will load, and you can begin adding and managing tasks immediately.
